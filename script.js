@@ -1,7 +1,7 @@
 class game{
 	
 	drawBackground(ctx){
-		ctx.fillStyle = "#0f0";
+		ctx.fillStyle = "#48bd00";
 		ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 	}
 }
