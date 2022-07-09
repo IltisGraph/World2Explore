@@ -1,3 +1,37 @@
+class chunk{
+	constructor(number, Trees, Stone, Mine){
+		this.Number = number;
+		this.Trees = Trees;
+		this.Stones = Stone;
+		this.Mines = Mine;
+	}
+	draw(ctx){
+		
+	}
+}
+
+class tree{
+	constructor(x, y){
+		this.x = x;
+		this.y = y;
+		this.image = document.getElementById("Baum");
+	}
+}
+
+class stone{
+	constructor(x, y){
+		this.x = x;
+		this.y = y;
+		this.image = document.getElementById("Stein");
+	}
+}
+
+class mine{
+	constructor(x, y){
+		this.x = x;
+		this.y = y;
+	}
+}
 class game{
 	
 	drawBackground(ctx){
@@ -5,14 +39,18 @@ class game{
 		ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 	}
 }
-
+//*******************************************
 
 const ctx = document.getElementById("GameScreen").getContext("2d");
 let canvas = document.getElementById("GameScreen");
 
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight;
+//images
 let SpielerImg = document.getElementById("Spieler");
+
+
+
 const GAME_WIDTH = window.innerWidth;
 const GAME_HEIGHT = window.innerHeight;
 
@@ -48,8 +86,8 @@ function GameLoop(dt){
 
 		//Spieler Zeichnen
 
-	ctx.drawImage(SpielerImg, GAME_WIDTH/2 - (Math.floor(Math.floor(100/(1000/GAME_WIDTH)/2))),
-GAME_HEIGHT/2 - (Math.floor(Math.floor(100/(1000/GAME_HEIGHT)/2))), Math.floor(100/(1000/GAME_WIDTH)), Math.floor(100/(1000/GAME_WIDTH)));
+	ctx.drawImage(SpielerImg, GAME_WIDTH/2 - (Math.floor(Math.floor(70/(1000/GAME_WIDTH)/2))),
+GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2))), Math.floor(70/(1000/GAME_WIDTH)), Math.floor(70/(1000/GAME_WIDTH)));
 
 
 
