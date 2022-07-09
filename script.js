@@ -6,7 +6,22 @@ class chunk{
 		this.Mines = Mine;
 	}
 	draw(ctx){
-		
+		let Nlength = Math.floor(70/(1000/GAME_WIDTH));
+		for(let tree of this.Trees){
+			if(tree.x > 0 && tree.y > 0 && tree.x < GAME_WIDTH && tree.y < GAME_HEIGHT){
+				ctx.drawImage(tree.image, tree.x, tree.y, Nlength, Nlength);
+			}
+		}
+		for(let stone of this.Stones){
+			if(stone.x > 0 && stone.y > 0 & stone.x < GAME_WIDTH && stone.y < GAME_HEIGHT){
+				ctx.drawImage(stone.image, stone.x, stone.y, Nlength, Nlength);
+			}
+		}
+		for(let mine of this.Mines){
+			if(mine.x > 0 && mine.y > 0 && mine.x < GAME_WIDTH && mine.y < GAME_HEIGHT){
+				ctx.drawImage(mine.image, mine.x, mine.y, Nlength, Nlength);
+			}
+		}
 	}
 }
 
