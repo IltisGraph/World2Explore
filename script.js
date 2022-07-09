@@ -8,10 +8,15 @@ class game{
 
 
 const ctx = document.getElementById("GameScreen").getContext("2d");
+let canvas = document.getElementById("GameScreen");
 
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight;
 let SpielerImg = document.getElementById("Spieler");
-const GAME_WIDTH = 2000;
-const GAME_HEIGHT = 1000;
+const GAME_WIDTH = window.innerWidth;
+const GAME_HEIGHT = window.innerHeight;
+
+
 
 const Game = new game();
 
