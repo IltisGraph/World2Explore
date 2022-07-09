@@ -9,6 +9,7 @@ class game{
 
 const ctx = document.getElementById("GameScreen").getContext("2d");
 
+let SpielerImg = document.getElementById("Spieler");
 const GAME_WIDTH = 2000;
 const GAME_HEIGHT = 1000;
 
@@ -22,6 +23,9 @@ function GameLoop(dt){
 	lastTime = dt;
 	Game.drawBackground(ctx);
 
+		//Spieler Zeichnen
+
+	ctx.drawImage(SpielerImg, 50, 50);
 
 
 
