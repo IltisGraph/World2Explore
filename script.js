@@ -16,6 +16,15 @@ const GAME_HEIGHT = 1000;
 const Game = new game();
 
 
+//Maus
+document.addEventListener("click", event => {
+
+	let x = event.clientX;
+	let y = event.clientY;
+	console.log("X, Y", x, y);
+});
+
+
 let lastTime = 0;
 
 function GameLoop(dt){
