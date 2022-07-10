@@ -24,7 +24,8 @@ class chunk{
 		}
 	}
 
-	go(direction, speed){
+	go(direction, speed, dt){
+		speed *= dt/16;
 		if(direction == "W" ||direction == "O"){
 			for(tree of this.Trees){
 				tree.x += speed;
@@ -215,16 +216,16 @@ GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2))), Math.floor(70
 		for(chunk of Chunks){
 			switch(Spieler.direction){
 				case "N":
-					chunk.go("N", 1);
+					chunk.go("N", 1, deltaTime);
 					break;
 				case "S":
-					chunk.go("S", -1);
+					chunk.go("S", -1, deltaTime);
 					break;
 				case "W":
-					chunk.go("W", 1);
+					chunk.go("W", 1, deltaTime);
 					break;
 				case "O":
-					chunk.go("O", -1);
+					chunk.go("O", -1, deltaTime);
 					break;
 			}
 		}
