@@ -6,7 +6,7 @@ class chunk{
 		this.Mines = Mine;
 	}
 	draw(ctx){
-		let Nlength = Math.floor(70/(1000/GAME_WIDTH));
+		let Nlength = Math.floor(70/(1000/GAME_HEIGHT));
 		for(let tree of this.Trees){
 			if(tree.x > 0 && tree.y > 0 && tree.x < GAME_WIDTH && tree.y < GAME_HEIGHT){
 				ctx.drawImage(tree.image, tree.x, tree.y, Nlength, Nlength);
@@ -208,7 +208,7 @@ function GameLoop(dt){
 		//Spieler Zeichnen
 
 	ctx.drawImage(SpielerImg, GAME_WIDTH/2 - (Math.floor(Math.floor(70/(1000/GAME_WIDTH)/2))),
-GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2))), Math.floor(70/(1000/GAME_WIDTH)), Math.floor(70/(1000/GAME_WIDTH)));
+GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2))), Math.floor(70/(1000/GAME_HEIGHT)), Math.floor(70/(1000/GAME_HEIGHT)));
 
 
 	//Update chunks
