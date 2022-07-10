@@ -45,6 +45,7 @@ class mine{
 	constructor(x, y){
 		this.x = x;
 		this.y = y;
+		this.image = document.getElementById("Loch_k");
 	}
 }
 class game{
@@ -63,7 +64,8 @@ canvas.width = window.innerWidth
 canvas.height = window.innerHeight;
 //images
 let SpielerImg = document.getElementById("Spieler");
-
+let SpielerViewDirection = "N";
+let SpielerGoDirection = "None";
 
 
 const GAME_WIDTH = window.innerWidth;
@@ -72,7 +74,25 @@ const GAME_HEIGHT = window.innerHeight;
 console.log(GAME_WIDTH, GAME_HEIGHT);
 
 const Game = new game();
-
+//functionen
+let Chunks = []
+function loadNewChunk(){
+	let Trees = [];
+	let Stones = [];
+	let Mines = [];
+	
+	for(let i = 0; i < 30; i++){
+		Trees.push(new tree(Math.floor(Math.random()*600), Math.floor(Math.random()*600)));
+	}
+	for(let i = 0; i < 20; i++){
+		Stones.push(new stone(Math.floor(Math.random()*600), Math.floor(Math.random()*600)));
+	}
+	for(let i = 0; i < 5; i++){
+		Mines.push(new mine(Math.floor(Math.random()*600), Math.floor(Math.random()*600)));
+	}
+	Chunks.push(new chunk(0, Trees, Stones, Mines));
+	
+}
 
 //Maus
 document.addEventListener("click", event => {
@@ -94,6 +114,8 @@ document.addEventListener("keyup", event => {
 
 let lastTime = 0;
 
+//DEBUG
+loadNewChunk();
 function GameLoop(dt){
 	let deltaTime = dt - lastTime;
 	lastTime = dt;
@@ -105,6 +127,8 @@ function GameLoop(dt){
 GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2))), Math.floor(70/(1000/GAME_WIDTH)), Math.floor(70/(1000/GAME_WIDTH)));
 
 
+	//DEBUG Chunk malen
+	Chunks[0].draw(ctx);
 
 
 	requestAnimationFrame(GameLoop);
