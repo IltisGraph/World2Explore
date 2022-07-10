@@ -23,6 +23,32 @@ class chunk{
 			}
 		}
 	}
+
+	go(direction, speed){
+		if(direction == "W" ||direction == "O"){
+			for(tree of this.Trees){
+				tree.x += speed;
+			}
+			for(stone of this.Stones){
+				stone.x += speed;
+			}
+			for(mine of this.Mines){
+				mine.x += speed;
+			}
+			
+		}
+		if(direction == "N" || direction == "S"){
+			for(tree of this.Trees){
+				tree.y += speed;
+			}
+			for(stone of this.Stones){
+				stone.y += speed;
+			}
+			for(mine of this.Mines){
+				mine.y += speed;
+			}
+		}
+	}
 }
 
 class tree{
@@ -49,10 +75,20 @@ class mine{
 	}
 }
 class game{
-	
+	constructor(x, y){
+		this.x = x;
+		this.y = y;
+	}
 	drawBackground(ctx){
 		ctx.fillStyle = "#48bd00";
 		ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+	}
+}
+
+class player{
+	constructor(){
+		this.direction = "None"
+		this.ChunkNumber = 0;
 	}
 }
 //*******************************************
@@ -75,7 +111,8 @@ const GAME_Y = GAME_HEIGHT / 700;
 
 console.log(GAME_WIDTH, GAME_HEIGHT);
 
-const Game = new game();
+const Game = new game(0, 0);
+const Spieler = new player();
 //functionen
 
 
@@ -115,11 +152,46 @@ document.addEventListener("click", event => {
 
 //Tastatur
 document.addEventListener("keydown", event => {
-	console.log(event.keyCode);
+	//console.log(event.keyCode);
+	switch(event.keyCode){
+		case 87:
+			Spieler.direction = "N";
+			break;
+		case 83:
+			Spieler.direction = "S";
+			break;
+		case 65:
+			Spieler.direction = "W";
+			break;
+		case 68:
+			Spieler.direction = "O";
+			break;
+	}
 });
 
 document.addEventListener("keyup", event => {
-	
+	switch(event.keyCode){
+		case 87:
+			if(Spieler.direction != "None"){
+				Spieler.direction = "None";
+				break;
+			}
+		case 83:
+			if(Spieler.direction != "None"){
+				Spieler.direction = "None";
+				break;
+			}
+		case 65:
+			if(Spieler.direction != "None"){
+				Spieler.direction = "None";
+				break;
+			}
+		case 68:
+			if(Spieler.direction != "None"){
+				Spieler.direction = "None";
+				break;
+			}
+	}
 });
 
 let lastTime = 0;
@@ -138,8 +210,33 @@ function GameLoop(dt){
 GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2))), Math.floor(70/(1000/GAME_WIDTH)), Math.floor(70/(1000/GAME_WIDTH)));
 
 
-	//DEBUG Chunk malen
-	Chunks[0].draw(ctx);
+	//Update chunks
+	if(Spieler.direction != "None"){
+		for(chunk of Chunks){
+			switch(Spieler.direction){
+				case "N":
+					chunk.go("N", 1);
+					break;
+				case "S":
+					chunk.go("S", -1);
+					break;
+				case "W":
+					chunk.go("W", 1);
+					break;
+				case "O":
+					chunk.go("O", -1);
+					break;
+			}
+		}
+	}
+
+
+	
+	//draw Chunks
+	for(chunk of Chunks){
+		chunk.draw(ctx);
+	}
+	
 
 
 	requestAnimationFrame(GameLoop);
