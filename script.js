@@ -6,7 +6,7 @@ class chunk{
 		this.Mines = Mine;
 	}
 	draw(ctx){
-		let Nlength = Math.floor(70/(1000/GAME_HEIGHT));
+		let Nlength = 100;
 		for(let tree of this.Trees){
 			if(tree.x > 0 && tree.y > 0 && tree.x < GAME_WIDTH && tree.y < GAME_HEIGHT){
 				ctx.drawImage(tree.image, tree.x, tree.y, Nlength, Nlength);
@@ -27,8 +27,10 @@ class chunk{
 	go(direction, speed, dt){
 		speed *= dt/16;
 		if(direction == "W" ||direction == "O"){
+			Game.x -= speed;
 			for(tree of this.Trees){
 				tree.x += speed;
+				
 			}
 			for(stone of this.Stones){
 				stone.x += speed;
@@ -39,6 +41,7 @@ class chunk{
 			
 		}
 		if(direction == "N" || direction == "S"){
+			Game.y -= speed;
 			for(tree of this.Trees){
 				tree.y += speed;
 			}
@@ -124,14 +127,14 @@ function loadNewChunk(){
 	let Stones = [];
 	let Mines = [];
 	
-	for(let i = 0; i < 30; i++){
-		Trees.push(new tree(Math.floor(Math.random()*(600 * GAME_X)), Math.floor(Math.random()*(600 * GAME_Y))));
-	}
-	for(let i = 0; i < 20; i++){
-		Stones.push(new stone(Math.floor(Math.random()*(600 * GAME_X)), Math.floor(Math.random()*(600) * GAME_Y)));
+	for(let i = 0; i < 10; i++){
+		Trees.push(new tree(Math.floor(Math.random()*(600)), Math.floor(Math.random()*(600))));
 	}
 	for(let i = 0; i < 5; i++){
-		Mines.push(new mine(Math.floor(Math.random()*(600 * GAME_X)), Math.floor(Math.random()*(600 * GAME_Y))));
+		Stones.push(new stone(Math.floor(Math.random()*(600 )), Math.floor(Math.random()*(600) )));
+	}
+	for(let i = 0; i < 1; i++){
+		Mines.push(new mine(Math.floor(Math.random()*(600 )), Math.floor(Math.random()*(600 ))));
 	}
 	Chunks.push(new chunk(0, Trees, Stones, Mines));
 	
@@ -208,15 +211,17 @@ function GameLoop(dt){
 		//Spieler Zeichnen
 
 	ctx.drawImage(SpielerImg, GAME_WIDTH/2 - (Math.floor(Math.floor(70/(1000/GAME_WIDTH)/2))),
-GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2))), Math.floor(70/(1000/GAME_HEIGHT)), Math.floor(70/(1000/GAME_HEIGHT)));
+GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2))), 100, 100);
 
 
 	//Update chunks
 	if(Spieler.direction != "None"){
+		let nStep = Math.floor(3.4)
 		for(chunk of Chunks){
 			switch(Spieler.direction){
 				case "N":
 					chunk.go("N", 1, deltaTime);
+					
 					break;
 				case "S":
 					chunk.go("S", -1, deltaTime);
@@ -231,7 +236,7 @@ GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2))), Math.floor(70
 		}
 	}
 
-
+	//console.log("x, y:", Game.x, Game.y);
 	
 	//draw Chunks
 	for(chunk of Chunks){
