@@ -70,11 +70,16 @@ let SpielerGoDirection = "None";
 
 const GAME_WIDTH = window.innerWidth;
 const GAME_HEIGHT = window.innerHeight;
+const GAME_X = GAME_WIDTH / 600;
+const GAME_Y = GAME_HEIGHT / 700;
 
 console.log(GAME_WIDTH, GAME_HEIGHT);
 
 const Game = new game();
 //functionen
+
+
+
 let Chunks = []
 function loadNewChunk(){
 	let Trees = [];
@@ -82,18 +87,23 @@ function loadNewChunk(){
 	let Mines = [];
 	
 	for(let i = 0; i < 30; i++){
-		Trees.push(new tree(Math.floor(Math.random()*600), Math.floor(Math.random()*600)));
+		Trees.push(new tree(Math.floor(Math.random()*(600 * GAME_X)), Math.floor(Math.random()*(600 * GAME_Y))));
 	}
 	for(let i = 0; i < 20; i++){
-		Stones.push(new stone(Math.floor(Math.random()*600), Math.floor(Math.random()*600)));
+		Stones.push(new stone(Math.floor(Math.random()*(600 * GAME_X)), Math.floor(Math.random()*(600) * GAME_Y)));
 	}
 	for(let i = 0; i < 5; i++){
-		Mines.push(new mine(Math.floor(Math.random()*600), Math.floor(Math.random()*600)));
+		Mines.push(new mine(Math.floor(Math.random()*(600 * GAME_X)), Math.floor(Math.random()*(600 * GAME_Y))));
 	}
 	Chunks.push(new chunk(0, Trees, Stones, Mines));
 	
 }
 
+
+
+
+
+//*********************************************
 //Maus
 document.addEventListener("click", event => {
 
@@ -119,6 +129,7 @@ loadNewChunk();
 function GameLoop(dt){
 	let deltaTime = dt - lastTime;
 	lastTime = dt;
+	//console.log(deltaTime);
 	Game.drawBackground(ctx);
 
 		//Spieler Zeichnen
