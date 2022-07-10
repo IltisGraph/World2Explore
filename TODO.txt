@@ -1,6 +1,6 @@
 TODO:
 
--check support for different screen sizes
+-add correct positioning for the chunks depending on the screen size [DONE]
 -add rotation to some elements
 -make holes block based
 -add rotation to the player (rotate in go direction)

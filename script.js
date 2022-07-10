@@ -93,6 +93,8 @@ class player{
 	constructor(){
 		this.direction = "None"
 		this.ChunkNumber = 0;
+		this.x = 0;
+		this.y = 0;
 	}
 }
 //*******************************************
@@ -122,19 +124,19 @@ const Spieler = new player();
 
 
 let Chunks = []
-function loadNewChunk(){
+function loadNewChunk(dx, dy){
 	let Trees = [];
 	let Stones = [];
 	let Mines = [];
 	
 	for(let i = 0; i < 10; i++){
-		Trees.push(new tree(Math.floor(Math.random()*(600)), Math.floor(Math.random()*(600))));
+		Trees.push(new tree(Math.floor(Math.random()*(600)) + dx, Math.floor(Math.random()*(600)) + dy));
 	}
 	for(let i = 0; i < 5; i++){
-		Stones.push(new stone(Math.floor(Math.random()*(600 )), Math.floor(Math.random()*(600) )));
+		Stones.push(new stone(Math.floor(Math.random()*(600 )) + dx, Math.floor(Math.random()*(600) ) + dy));
 	}
 	for(let i = 0; i < 1; i++){
-		Mines.push(new mine(Math.floor(Math.random()*(600 )), Math.floor(Math.random()*(600 ))));
+		Mines.push(new mine(Math.floor(Math.random()*(600 )) + dx, Math.floor(Math.random()*(600 )) + dy));
 	}
 	Chunks.push(new chunk(0, Trees, Stones, Mines));
 	
@@ -201,7 +203,14 @@ document.addEventListener("keyup", event => {
 let lastTime = 0;
 
 //DEBUG
-loadNewChunk();
+
+
+//spieler Grundcords bestimmen
+Spieler.x = GAME_WIDTH/2 - (Math.floor(Math.floor(70/(1000/GAME_WIDTH)/2)));
+Spieler.y = GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2)));
+console.log("dx, ,dy:", Spieler.x, Spieler.y);
+
+loadNewChunk(Spieler.x - 300, Spieler.y - 300);
 function GameLoop(dt){
 	let deltaTime = dt - lastTime;
 	lastTime = dt;
