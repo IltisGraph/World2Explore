@@ -4,22 +4,24 @@ class chunk{
 		this.Trees = Trees;
 		this.Stones = Stone;
 		this.Mines = Mine;
+		this.offsetX = 0;
+		this.offsetY = 0;
 	}
 	draw(ctx){
 		let Nlength = 100;
 		for(let tree of this.Trees){
 			if(tree.x > 0 && tree.y > 0 && tree.x < GAME_WIDTH && tree.y < GAME_HEIGHT){
-				ctx.drawImage(tree.image, tree.x, tree.y, Nlength, Nlength);
+				ctx.drawImage(tree.image, tree.x + this.offsetX, tree.y + this.offsetY, Nlength, Nlength);
 			}
 		}
 		for(let stone of this.Stones){
 			if(stone.x > 0 && stone.y > 0 & stone.x < GAME_WIDTH && stone.y < GAME_HEIGHT){
-				ctx.drawImage(stone.image, stone.x, stone.y, Nlength, Nlength);
+				ctx.drawImage(stone.image, stone.x + this.offsetX, stone.y + this.offsetY, Nlength, Nlength);
 			}
 		}
 		for(let mine of this.Mines){
 			if(mine.x > 0 && mine.y > 0 && mine.x < GAME_WIDTH && mine.y < GAME_HEIGHT){
-				ctx.drawImage(mine.image, mine.x, mine.y, Nlength, Nlength);
+				ctx.drawImage(mine.image, mine.x + this.offsetX, mine.y + this.offsetY, Nlength, Nlength);
 			}
 		}
 	}
@@ -27,30 +29,11 @@ class chunk{
 	go(direction, speed, dt){
 		speed *= dt/16;
 		if(direction == "W" ||direction == "O"){
-			Game.x -= speed;
-			for(tree of this.Trees){
-				tree.x += speed;
-				
-			}
-			for(stone of this.Stones){
-				stone.x += speed;
-			}
-			for(mine of this.Mines){
-				mine.x += speed;
-			}
-			
+			this.offsetX += speed;
 		}
 		if(direction == "N" || direction == "S"){
-			Game.y -= speed;
-			for(tree of this.Trees){
-				tree.y += speed;
-			}
-			for(stone of this.Stones){
-				stone.y += speed;
-			}
-			for(mine of this.Mines){
-				mine.y += speed;
-			}
+			this.offsetY += speed;
+			
 		}
 	}
 }
@@ -60,6 +43,8 @@ class tree{
 		this.x = x;
 		this.y = y;
 		this.image = document.getElementById("Baum");
+		this.Cx = x;
+		this.Cy = y;
 	}
 }
 
@@ -68,6 +53,8 @@ class stone{
 		this.x = x;
 		this.y = y;
 		this.image = document.getElementById("Stein");
+		this.Cx = x;
+		this.Cy = y;
 	}
 }
 
@@ -76,6 +63,8 @@ class mine{
 		this.x = x;
 		this.y = y;
 		this.image = document.getElementById("Loch_k");
+		this.Cx = x;
+		this.Cy = y;
 	}
 }
 class game{
@@ -257,4 +246,10 @@ GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2))), 100, 100);
 	requestAnimationFrame(GameLoop);
 }
 
+
+function startScreen(){
+	//Startscreen
+}
+
+	//wird ausgeführt
 GameLoop(1);
