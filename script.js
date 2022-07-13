@@ -155,6 +155,9 @@ document.addEventListener("click", event => {
 	let y = event.clientY;
 
 	if(Game.screen = "start"){
+		if(x > GAME_WIDTH / 2 - 170 && x < GAME_WIDTH / 2 - 170 + 170 * 2  + 50 && y > GAME_HEIGHT / 2 - 25 && y < GAME_HEIGHT / 2 - 25 + 70 * 3){
+			GameLoop();
+		}
 		
 	}
 	
@@ -275,7 +278,8 @@ function startScreen(){
 	]
 
 	//Zufälligen hintergrundstyle wählen & Malen
-	ctx.fillStyle = styles[Math.floor(Math.random()*styles.length)];
+	let Rstyle = Math.floor(Math.random()*styles.length);
+	ctx.fillStyle = styles[Rstyle];
 	ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
 	//Text + SPLASH
@@ -287,8 +291,7 @@ function startScreen(){
 
 
 	//Button
-	ctx.fillStyle = "#000000";
-	ctx.fillRect(GAME_WIDTH / 2 - 50, GAME_HEIGHT / 2 - 15, 100, 30);
+	ctx.drawImage(document.getElementById("Bsingleplayer"),GAME_WIDTH / 2 - 170, GAME_HEIGHT/2 - 25);
 	
 	
 }
