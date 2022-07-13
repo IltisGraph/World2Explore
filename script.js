@@ -154,9 +154,10 @@ document.addEventListener("click", event => {
 	let x = event.clientX;
 	let y = event.clientY;
 
-	if(Game.screen = "start"){
+	if(Game.screen == "start"){
 		if(x > GAME_WIDTH / 2 - 170 && x < GAME_WIDTH / 2 - 170 + 170 * 2  + 50 && y > GAME_HEIGHT / 2 - 25 && y < GAME_HEIGHT / 2 - 25 + 70 * 3){
 			GameLoop();
+			Game.screen = "singleplayer";
 		}
 		
 	}
