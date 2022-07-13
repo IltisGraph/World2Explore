@@ -71,6 +71,7 @@ class game{
 	constructor(x, y){
 		this.x = x;
 		this.y = y;
+		this.screen = "game";
 	}
 	drawBackground(ctx){
 		ctx.fillStyle = "#48bd00";
@@ -104,7 +105,18 @@ const GAME_HEIGHT = window.innerHeight;
 const GAME_X = GAME_WIDTH / 600;
 const GAME_Y = GAME_HEIGHT / 700;
 
+const SPLASH = [
+	"HOLA!",
+	"Trees by IltisGraph",
+	"Created by IltisGraph",
+	"Bless you!",
+	"9c is best!",
+	"Thank you James007!",
+	"Thank you Infinity!"
+]
+
 console.log(GAME_WIDTH, GAME_HEIGHT);
+
 
 const Game = new game(0, 0);
 const Spieler = new player();
@@ -141,6 +153,10 @@ document.addEventListener("click", event => {
 
 	let x = event.clientX;
 	let y = event.clientY;
+
+	if(Game.screen = "start"){
+		
+	}
 	
 });
 
@@ -249,7 +265,34 @@ GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2))), 100, 100);
 
 function startScreen(){
 	//Startscreen
+	Game.screen = "start";
+	let styles = [
+		"#EAB72A",
+		"#BD8784",
+		"#6984EC",
+		"#4DDD27",
+		"#4DDD27"
+	]
+
+	//Zufälligen hintergrundstyle wählen & Malen
+	ctx.fillStyle = styles[Math.floor(Math.random()*styles.length)];
+	ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+	//Text + SPLASH
+	ctx.fillStyle = "#000000";
+	ctx.font = "100px calibri";
+	ctx.fillText("World2Explore", 20, 100, GAME_WIDTH - 20);
+	ctx.font = "50px times new roman";	 	  
+ 	ctx.strokeText(SPLASH[Math.floor(Math.random()*SPLASH.length)], GAME_WIDTH / 2 + 50, 170, GAME_WIDTH - (GAME_WIDTH / 2 + 50));
+
+
+	//Button
+	ctx.fillStyle = "#000000";
+	ctx.fillRect(GAME_WIDTH / 2 - 50, GAME_HEIGHT / 2 - 15, 100, 30);
+	
+	
 }
 
 	//wird ausgeführt
-GameLoop(1);
+//GameLoop(1);
+startScreen();
