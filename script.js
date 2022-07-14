@@ -11,12 +11,14 @@ class chunk{
 		let Nlength = 100;
 		for(let tree of this.Trees){
 			if(tree.x > 0 && tree.y > 0 && tree.x < GAME_WIDTH && tree.y < GAME_HEIGHT){
-				ctx.drawImage(tree.image, tree.x + this.offsetX, tree.y + this.offsetY, Nlength, Nlength);
+				ctx.drawImage(tree.image, tree.x + this.offsetX, tree.y + this.offsetY, 150, 150);
 			}
 		}
+		
 		for(let stone of this.Stones){
+			
 			if(stone.x > 0 && stone.y > 0 & stone.x < GAME_WIDTH && stone.y < GAME_HEIGHT){
-				ctx.drawImage(stone.image, stone.x + this.offsetX, stone.y + this.offsetY, Nlength, Nlength);
+				ctx.drawImage(stone.image, stone.x + this.offsetX, stone.y + this.offsetY, stone.Nx, stone.Nx);
 			}
 		}
 		for(let mine of this.Mines){
@@ -55,6 +57,8 @@ class stone{
 		this.image = document.getElementById("Stein");
 		this.Cx = x;
 		this.Cy = y;
+		this.Nx = 100;
+		
 	}
 }
 
@@ -81,7 +85,7 @@ class game{
 
 class player{
 	constructor(){
-		this.direction = "None"
+		this.direction = ["None", "None", "None", "None"];
 		this.ChunkNumber = 0;
 		this.x = 0;
 		this.y = 0;
@@ -106,8 +110,8 @@ const GAME_X = GAME_WIDTH / 600;
 const GAME_Y = GAME_HEIGHT / 700;
 
 const SPLASH = [
-	"HOLA!",
-	"Trees by IltisGraph",
+	"¡HOLA!",
+	"Trees by Infinity",
 	"Created by IltisGraph",
 	"Bless you!",
 	"9c is best!",
@@ -134,10 +138,15 @@ function loadNewChunk(dx, dy){
 		Trees.push(new tree(Math.floor(Math.random()*(600)) + dx, Math.floor(Math.random()*(600)) + dy));
 	}
 	for(let i = 0; i < 5; i++){
+		
 		Stones.push(new stone(Math.floor(Math.random()*(600 )) + dx, Math.floor(Math.random()*(600) ) + dy));
+		//Stones[Stones.length - 1].Nx = Math.floor(Math.random()*5)*50;
 	}
-	for(let i = 0; i < 1; i++){
-		Mines.push(new mine(Math.floor(Math.random()*(600 )) + dx, Math.floor(Math.random()*(600 )) + dy));
+	let r = Math.floor(Math.random()*20);
+	if(r == 10){
+		for(let i = 0; i < 1; i++){
+			Mines.push(new mine(Math.floor(Math.random()*(60 )) * 10 + dx, Math.floor(Math.random()*(60 )) * 10 + dy));
+		}
 	}
 	Chunks.push(new chunk(0, Trees, Stones, Mines));
 	
@@ -170,16 +179,16 @@ document.addEventListener("keydown", event => {
 	//console.log(event.keyCode);
 	switch(event.keyCode){
 		case 87:
-			Spieler.direction = "N";
+			Spieler.direction[0] = "N";
 			break;
 		case 83:
-			Spieler.direction = "S";
+			Spieler.direction[2] = "S";
 			break;
 		case 65:
-			Spieler.direction = "W";
+			Spieler.direction[3] = "W";
 			break;
 		case 68:
-			Spieler.direction = "O";
+			Spieler.direction[1] = "O";
 			break;
 	}
 });
@@ -187,23 +196,23 @@ document.addEventListener("keydown", event => {
 document.addEventListener("keyup", event => {
 	switch(event.keyCode){
 		case 87:
-			if(Spieler.direction != "None"){
-				Spieler.direction = "None";
+			if(Spieler.direction[0] != "None" && Spieler.direction[0] == "N"){
+				Spieler.direction[0] = "None";
 				break;
 			}
 		case 83:
-			if(Spieler.direction != "None"){
-				Spieler.direction = "None";
+			if(Spieler.direction[2] != "None" && Spieler.direction[2] == "S"){
+				Spieler.direction[2] = "None";
 				break;
 			}
 		case 65:
-			if(Spieler.direction != "None"){
-				Spieler.direction = "None";
+			if(Spieler.direction[3] != "None" && Spieler.direction[3] == "W"){
+				Spieler.direction[3] = "None";
 				break;
 			}
 		case 68:
-			if(Spieler.direction != "None"){
-				Spieler.direction = "None";
+			if(Spieler.direction[1] != "None" && Spieler.direction[1] == "O"){
+				Spieler.direction[1] = "None";
 				break;
 			}
 	}
@@ -236,26 +245,26 @@ GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2))), 100, 100);
 	if(Spieler.direction != "None"){
 		let nStep = Math.floor(3.4)
 		for(chunk of Chunks){
-			switch(Spieler.direction){
-				case "N":
-					chunk.go("N", 1, deltaTime);
-					
-					break;
-				case "S":
-					chunk.go("S", -1, deltaTime);
-					break;
-				case "W":
-					chunk.go("W", 1, deltaTime);
-					break;
-				case "O":
-					chunk.go("O", -1, deltaTime);
-					break;
+			
+			if(Spieler.direction[0] == "N"){
+				chunk.go("N", 1, deltaTime);
+			}				
+			
+			if(Spieler.direction[2] == "S"){
+				chunk.go("S", -1, deltaTime);
 			}
+			if(Spieler.direction[3] == "W"){
+				chunk.go("W", 1, deltaTime);
+			}
+			if(Spieler.direction[1] == "O"){
+				chunk.go("O", -1, deltaTime);
+			}
+			
 		}
 	}
 
 	//console.log("x, y:", Game.x, Game.y);
-	
+	//console.log("Direction", Spieler.direction);
 	//draw Chunks
 	for(chunk of Chunks){
 		chunk.draw(ctx);
