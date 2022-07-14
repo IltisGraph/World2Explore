@@ -177,19 +177,21 @@ document.addEventListener("click", event => {
 //Tastatur
 document.addEventListener("keydown", event => {
 	//console.log(event.keyCode);
-	switch(event.keyCode){
-		case 87:
-			Spieler.direction[0] = "N";
-			break;
-		case 83:
-			Spieler.direction[2] = "S";
-			break;
-		case 65:
-			Spieler.direction[3] = "W";
-			break;
-		case 68:
-			Spieler.direction[1] = "O";
-			break;
+	if(Game.screen == "singleplayer"){
+		switch(event.keyCode){
+			case 87:
+				Spieler.direction[0] = "N";
+				break;
+			case 83:
+				Spieler.direction[2] = "S";
+				break;
+			case 65:
+				Spieler.direction[3] = "W";
+				break;
+			case 68:
+				Spieler.direction[1] = "O";
+				break;
+		}
 	}
 });
 
