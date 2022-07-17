@@ -308,6 +308,40 @@ function startScreen(){
 	
 }
 
+
+let aNumber = 0;
+let bNumber = 0;
+let c = 0;
+let d = Math.floor(Math.random()*5) + 1;
+function LoadScreen(){
+	ctx.fillStyle = "#EAB72A";
+	ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+
+	let animation = ["Loading.", "Loading..", "Loading..."];
+	
+	ctx.fillStyle = "#000000";
+	ctx.font = "70px times new roman";
+	ctx.fillText(animation[aNumber], GAME_WIDTH/2-70, GAME_HEIGHT/2-35, GAME_WIDTH - GAME_WIDTH/2-70);
+	bNumber += 1;
+	if(bNumber >= 70){
+		bNumber = 0;
+		aNumber += 1;
+		if(aNumber > 2){
+			aNumber = 0;
+			c += 1;
+		}
+	}
+	let t = setTimeout(function(){LoadScreen();},10);
+
+	if(c >= d){
+		clearTimeout(t);
+		startScreen();
+	}
+	
+}
+
 	//wird ausgeführt
 //GameLoop(1);
-startScreen();
+//startScreen();
+LoadScreen();
