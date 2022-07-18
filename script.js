@@ -89,6 +89,33 @@ class player{
 		this.ChunkNumber = 0;
 		this.x = 0;
 		this.y = 0;
+		this.degrees = 0;
+	}
+	akDegrees(){
+		if(this.direction[0] == "N"){
+			this.degrees = 0;
+		}
+		if(this.direction[1] == "O"){
+			this.degrees = 90;
+		}
+		if(this.direction[2] == "S"){
+			this.degrees = 180;
+		}
+		if(this.direction[3] == "W"){
+			this.degrees = 270;
+		}
+		if(this.direction[0] == "N" && this.direction[1] == "O"){
+			this.degrees = 45;
+		}
+		if(this.direction[0] == "N" && this.direction[3] == "W"){
+			this.degrees = 315;
+		}
+		if(this.direction[2] == "S" && this.direction[1] == "O"){
+			this.degrees = 135;
+		}
+		if(this.direction[2] == "S" && this.direction[3] == "W"){
+			this.degrees = 225;
+		}
 	}
 }
 //*******************************************
@@ -230,18 +257,49 @@ Spieler.x = GAME_WIDTH/2 - (Math.floor(Math.floor(70/(1000/GAME_WIDTH)/2)));
 Spieler.y = GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2)));
 console.log("dx, ,dy:", Spieler.x, Spieler.y);
 
+
+
+
+
+//Spieler rotieren
+
+
+
 loadNewChunk(Spieler.x - 300, Spieler.y - 300);
+
+//GGAMLLOOP
+
+//let lastDeg = 0;
 function GameLoop(dt){
+
+	
 	let deltaTime = dt - lastTime;
 	lastTime = dt;
 	//console.log(deltaTime);
+
+
+	//Spieler rotation aktualisieren
+	Spieler.akDegrees();
 	Game.drawBackground(ctx);
+
+
 
 		//Spieler Zeichnen
 
-	ctx.drawImage(SpielerImg, GAME_WIDTH/2 - (Math.floor(Math.floor(70/(1000/GAME_WIDTH)/2))),
-GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2))), 100, 100);
+	
+	ctx.save();
+	ctx.translate(Spieler.x + 50, Spieler.y + 50);
+	
+	ctx.rotate(Spieler.degrees*Math.PI/180);
+	//lastDeg = Spieler.degrees;
+	
+	//ctx.translate(-Spieler.x + 50, -Spieler.y + 50);
+	
 
+	ctx.drawImage(SpielerImg, -50, -50, 100, 100);
+
+	
+	ctx.restore();
 
 	//Update chunks
 	if(Spieler.direction != "None"){
