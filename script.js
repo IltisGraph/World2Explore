@@ -88,6 +88,7 @@ class game{
 class player{
 	constructor(){
 		this.direction = ["None", "None", "None", "None"];
+		this.speed = 1;
 		this.validMove = [true, true, true, true];
 		this.ChunkNumber = 0;
 		this.x = 0;
@@ -230,6 +231,9 @@ document.addEventListener("keydown", event => {
 			case 68:
 				Spieler.direction[1] = "O";
 				break;
+			case 16:
+				Spieler.speed = 3;
+				break;
 		}
 	}
 });
@@ -256,6 +260,9 @@ document.addEventListener("keyup", event => {
 				Spieler.direction[1] = "None";
 				break;
 			}
+		case 16:
+			Spieler.speed = 1;
+			break;
 	}
 });
 
@@ -319,17 +326,17 @@ function GameLoop(dt){
 		for(chunk of Chunks){
 			
 			if(Spieler.direction[0] == "N"){
-				chunk.go("N", 1, deltaTime);
+				chunk.go("N", Spieler.speed, deltaTime);
 			}				
 			
 			if(Spieler.direction[2] == "S"){
-				chunk.go("S", -1, deltaTime);
+				chunk.go("S", -Spieler.speed, deltaTime);
 			}
 			if(Spieler.direction[3] == "W"){
-				chunk.go("W", 1, deltaTime);
+				chunk.go("W", Spieler.speed, deltaTime);
 			}
 			if(Spieler.direction[1] == "O"){
-				chunk.go("O", -1, deltaTime);
+				chunk.go("O", -Spieler.speed, deltaTime);
 			}
 			
 		}

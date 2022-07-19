@@ -8,7 +8,7 @@ TODO:
 -perlin noise (-> seeds)
 -fewer mines should be generated [DONE]
 -Bigger Trees [DONE]
--running
+-running [DONE]
 
 
 
