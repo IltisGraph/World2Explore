@@ -13,7 +13,8 @@ class chunk{
 		let Nlength = 100;
 		for(let tree of this.Trees){
 			if(tree.x > 0 && tree.y > 0 && tree.x < GAME_WIDTH && tree.y < GAME_HEIGHT){
-				ctx.drawImage(tree.image, tree.x + this.offsetX + this.gOffsetX, tree.y + this.offsetY + this.gOffsetY, 150, 150);
+				ctx.drawImage(tree.image, tree.x + this.offsetX + this.gOffsetX, tree.y + this.offsetY + this.gOffsetY, tree.Nx, tree.Nx);
+				Spieler.checkColider(tree, this.Number);
 			}
 		}
 		
@@ -21,22 +22,26 @@ class chunk{
 			
 			if(stone.x > 0 && stone.y > 0 & stone.x < GAME_WIDTH && stone.y < GAME_HEIGHT){
 				ctx.drawImage(stone.image, stone.x + this.offsetX + this.gOffsetX, stone.y + this.offsetY + this.gOffsetY, stone.Nx, stone.Nx);
+				Spieler.checkColider(stone, this.Number);
 			}
 		}
 		for(let mine of this.Mines){
 			if(mine.x > 0 && mine.y > 0 && mine.x < GAME_WIDTH && mine.y < GAME_HEIGHT){
-				ctx.drawImage(mine.image, mine.x + this.offsetX + this.gOffsetX, mine.y + this.offsetY + this.gOffsetY, Nlength, Nlength);
+				ctx.drawImage(mine.image, mine.x + this.offsetX + this.gOffsetX, mine.y + this.offsetY + this.gOffsetY, mine.Nx, mine.Nx);
 			}
 		}
 	}
 
 	go(direction, speed, dt){
 		speed *= dt/16;
+		speed = Math.round(speed);
 		if(direction == "W" ||direction == "O"){
 			this.offsetX += speed;
+			Game.x += -speed;
 		}
 		if(direction == "N" || direction == "S"){
 			this.offsetY += speed;
+			Game.y += -speed;
 			
 		}
 	}
@@ -49,6 +54,7 @@ class tree{
 		this.image = document.getElementById("Baum");
 		this.Cx = x;
 		this.Cy = y;
+		this.Nx = 150;
 	}
 }
 
@@ -71,6 +77,7 @@ class mine{
 		this.image = document.getElementById("Loch_k");
 		this.Cx = x;
 		this.Cy = y;
+		this.Nx = 100;
 	}
 }
 class game{
@@ -121,10 +128,15 @@ class player{
 			this.degrees = 225;
 		}
 	}
-	checkColider(object){
+	checkColider(object, num){
 		//Checks if the player collides with anything
 		//should be implemented in Chunk.go();
 		
+		//N
+		if(object.Y + Chunks[num].gOffsetY + Chunks[num].offsetY + object.Nx > Game.y && object.Y + Chunks[num].gOffsetY + Chunks[num].offsetY < Game.y && object.X + Chunks[num].gOffsetX + Chunks[num].offsetX + object.Nx > Game.x && object.X + Chunks[num].gOffsetX + Chunks[num].offsetX < Game.x){
+			this.validMove[0] = false;
+			
+		} 
 		
 		
 	}
@@ -167,7 +179,7 @@ const Spieler = new player();
 
 
 let Chunks = []
-function loadNewChunk(dx, dy){
+function loadNewChunk(dx, dy, num){
 	let Trees = [];
 	let Stones = [];
 	let Mines = [];
@@ -186,7 +198,7 @@ function loadNewChunk(dx, dy){
 			Mines.push(new mine(Math.floor(Math.random()*(60 )) * 10, Math.floor(Math.random()*(60 )) * 10));
 		}
 	}
-	Chunks.push(new chunk(0, Trees, Stones, Mines));
+	Chunks.push(new chunk(num, Trees, Stones, Mines));
 	Chunks[Chunks.length - 1].gOffsetX = dx;
 	Chunks[Chunks.length - 1].gOffsetY = dy;
 	
@@ -220,17 +232,25 @@ document.addEventListener("keydown", event => {
 	if(Game.screen == "singleplayer"){
 		switch(event.keyCode){
 			case 87:
-				Spieler.direction[0] = "N";
-				break;
+				if(Spieler.validMove[0]){
+					Spieler.direction[0] = "N";
+					break;
+				}
 			case 83:
-				Spieler.direction[2] = "S";
-				break;
+				if(Spieler.validMove[2]){
+					Spieler.direction[2] = "S";
+					break;
+				}
 			case 65:
-				Spieler.direction[3] = "W";
-				break;
+				if(Spieler.validMove[3]){
+					Spieler.direction[3] = "W";
+					break;
+				}
 			case 68:
-				Spieler.direction[1] = "O";
-				break;
+				if(Spieler.validMove[1]){
+					Spieler.direction[1] = "O";
+					break;
+				}
 			case 16:
 				Spieler.speed = 3;
 				break;
@@ -276,7 +296,8 @@ Spieler.x = GAME_WIDTH/2 - (Math.floor(Math.floor(70/(1000/GAME_WIDTH)/2)));
 Spieler.y = GAME_HEIGHT/2 - (Math.floor(Math.floor(70/(1000/GAME_HEIGHT)/2)));
 console.log("dx, ,dy:", Spieler.x, Spieler.y);
 
-
+Game.x = Spieler.x;
+Game.y = Spieler.y;
 
 
 
@@ -284,7 +305,7 @@ console.log("dx, ,dy:", Spieler.x, Spieler.y);
 
 
 
-loadNewChunk(Spieler.x - 300, Spieler.y - 300);
+loadNewChunk(Spieler.x - 300, Spieler.y - 300, 0);
 
 //GGAMLLOOP
 
@@ -342,7 +363,7 @@ function GameLoop(dt){
 		}
 	}
 
-	//console.log("x, y:", Game.x, Game.y);
+	console.log("x, y:", Game.x, Game.y);
 	//console.log("Direction", Spieler.direction);
 	//draw Chunks
 	for(chunk of Chunks){
