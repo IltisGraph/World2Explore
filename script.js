@@ -6,24 +6,26 @@ class chunk{
 		this.Mines = Mine;
 		this.offsetX = 0;
 		this.offsetY = 0;
+		this.gOffsetX = 0;
+		this.gOffsetY = 0;
 	}
 	draw(ctx){
 		let Nlength = 100;
 		for(let tree of this.Trees){
 			if(tree.x > 0 && tree.y > 0 && tree.x < GAME_WIDTH && tree.y < GAME_HEIGHT){
-				ctx.drawImage(tree.image, tree.x + this.offsetX, tree.y + this.offsetY, 150, 150);
+				ctx.drawImage(tree.image, tree.x + this.offsetX + this.gOffsetX, tree.y + this.offsetY + this.gOffsetY, 150, 150);
 			}
 		}
 		
 		for(let stone of this.Stones){
 			
 			if(stone.x > 0 && stone.y > 0 & stone.x < GAME_WIDTH && stone.y < GAME_HEIGHT){
-				ctx.drawImage(stone.image, stone.x + this.offsetX, stone.y + this.offsetY, stone.Nx, stone.Nx);
+				ctx.drawImage(stone.image, stone.x + this.offsetX + this.gOffsetX, stone.y + this.offsetY + this.gOffsetY, stone.Nx, stone.Nx);
 			}
 		}
 		for(let mine of this.Mines){
 			if(mine.x > 0 && mine.y > 0 && mine.x < GAME_WIDTH && mine.y < GAME_HEIGHT){
-				ctx.drawImage(mine.image, mine.x + this.offsetX, mine.y + this.offsetY, Nlength, Nlength);
+				ctx.drawImage(mine.image, mine.x + this.offsetX + this.gOffsetX, mine.y + this.offsetY + this.gOffsetY, Nlength, Nlength);
 			}
 		}
 	}
@@ -86,6 +88,7 @@ class game{
 class player{
 	constructor(){
 		this.direction = ["None", "None", "None", "None"];
+		this.validMove = [true, true, true, true];
 		this.ChunkNumber = 0;
 		this.x = 0;
 		this.y = 0;
@@ -116,6 +119,13 @@ class player{
 		if(this.direction[2] == "S" && this.direction[3] == "W"){
 			this.degrees = 225;
 		}
+	}
+	checkColider(object){
+		//Checks if the player collides with anything
+		//should be implemented in Chunk.go();
+		
+		
+		
 	}
 }
 //*******************************************
@@ -162,20 +172,22 @@ function loadNewChunk(dx, dy){
 	let Mines = [];
 	
 	for(let i = 0; i < 10; i++){
-		Trees.push(new tree(Math.floor(Math.random()*(600)) + dx, Math.floor(Math.random()*(600)) + dy));
+		Trees.push(new tree(Math.floor(Math.random()*(600)), Math.floor(Math.random()*(600))));
 	}
 	for(let i = 0; i < 5; i++){
 		
-		Stones.push(new stone(Math.floor(Math.random()*(600 )) + dx, Math.floor(Math.random()*(600) ) + dy));
+		Stones.push(new stone(Math.floor(Math.random()*(600 )), Math.floor(Math.random()*(600) ) ));
 		//Stones[Stones.length - 1].Nx = Math.floor(Math.random()*5)*50;
 	}
 	let r = Math.floor(Math.random()*20);
 	if(r == 10){
 		for(let i = 0; i < 1; i++){
-			Mines.push(new mine(Math.floor(Math.random()*(60 )) * 10 + dx, Math.floor(Math.random()*(60 )) * 10 + dy));
+			Mines.push(new mine(Math.floor(Math.random()*(60 )) * 10, Math.floor(Math.random()*(60 )) * 10));
 		}
 	}
 	Chunks.push(new chunk(0, Trees, Stones, Mines));
+	Chunks[Chunks.length - 1].gOffsetX = dx;
+	Chunks[Chunks.length - 1].gOffsetY = dy;
 	
 }
 
