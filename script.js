@@ -1,144 +1,74 @@
+class random{
+	static randint(a, b) {
+		b++;
+		return Math.floor(Math.random() * (b - a)) + a;
+	}
+}
+
+
 class chunk{
 	constructor(number, Trees, Stone, Mine){
 		this.Number = number;
 		this.Trees = Trees;
 		this.Stones = Stone;
 		this.Mines = Mine;
-		this.offsetX = 0;
-		this.offsetY = 0;
-		this.gOffsetX = 0;
-		this.gOffsetY = 0;
+		
 	}
 	draw(ctx){
-		let Nlength = 100;
+		
 		for(let tree of this.Trees){
 			if(tree.x > 0 && tree.y > 0 && tree.x < GAME_WIDTH && tree.y < GAME_HEIGHT){
-				ctx.drawImage(tree.image, tree.x + this.offsetX + this.gOffsetX, tree.y + this.offsetY + this.gOffsetY, tree.Nx, tree.Nx);
+				ctx.drawImage(tree.image, tree.x + Spieler.x - Game.x, tree.y + Spieler.y - Game.y, tree.Nx, tree.Nx);
 			}
 		}
 		
 		for(let stone of this.Stones){
 			
 			if(stone.x > 0 && stone.y > 0 & stone.x < GAME_WIDTH && stone.y < GAME_HEIGHT){
-				ctx.drawImage(stone.image, stone.x + this.offsetX + this.gOffsetX, stone.y + this.offsetY + this.gOffsetY, stone.Nx, stone.Nx);
+				ctx.drawImage(stone.image, stone.x + Spieler.x - Game.x, stone.y + Spieler.y - Game.y, stone.Nx, stone.Nx);
 			}
 		}
 		for(let mine of this.Mines){
 			if(mine.x > 0 && mine.y > 0 && mine.x < GAME_WIDTH && mine.y < GAME_HEIGHT){
-				ctx.drawImage(mine.image, mine.x + this.offsetX + this.gOffsetX, mine.y + this.offsetY + this.gOffsetY, mine.Nx, mine.Nx);
+				ctx.drawImage(mine.image, mine.x + Spieler.x - Game.x, mine.y + Spieler.y - Game.y, mine.Nx, mine.Nx);
 			}
 		}
 	}
 
-	go(direction, speed, dt){
-		speed *= dt/16;
-		speed = Math.round(speed);
-		if(direction == "W" ||direction == "O"){
-			this.offsetX += speed;
-			Game.x += -speed;
-		}
-		if(direction == "N" || direction == "S"){
-			this.offsetY += speed;
-			Game.y += -speed;
-			
-		}
-	}
+
 
 	// Collider
-	checkCollider(){
-		//N
-		//console.log("hello");
-		let N = true;
-		for(let tree of this.Trees){
-			if(checkIfCollided(Game.x, Game.y, tree.wx, tree.wy, tree.wx + tree.Nx, tree.wy + tree.Ny) &&
-				checkIfCollided(Game.x + 2, Game.y, tree.wx, tree.xy, tree.Nx, tree.Ny)){
-				Spieler.validMove[0] = false;
-				Spieler.direction[0] = "None";
-				N = false;
-				break;
-				
-			}
-		}
-		if(N){
-				Spieler.validMove[0] = true;
-		}
-		N = true;
-		//s
-		for(let tree of this.Trees){
-			if(checkIfCollided(Game.x, Game.y + 100, tree.wx, tree.wy, tree.wx + tree.Nx, tree.wy + tree.Ny) &&
-				checkIfCollided(Game.x + 2, Game.y + 100, tree.wx, tree.xy, tree.Nx, tree.Ny)){
-				Spieler.validMove[2] = false;
-				Spieler.direction[2] = "None";
-				N = false;
-				break;
-			}
-		}
-		if(N){
-			Spieler.validMove[2] = true;
-		}
-		N = true;
-		//o
-		for(let tree of this.Trees){
-			if(checkIfCollided(Game.x + 100, Game.y, tree.wx, tree.wy, tree.wx + tree.Nx, tree.wy + tree.Ny) &&
-				checkIfCollided(Game.x + 100, Game.y + 2, tree.wx, tree.xy, tree.Nx, tree.Ny)){
-				Spieler.validMove[1] = false;
-				Spieler.direction[1] = "None";
-				N = false;
-				break;
-			}
-			
-		}
-		if(N){
-			Spieler.validMove[1] = true;
-		}
-		N = true;
-		// W
-		for(let tree of this.Trees){
-			if(checkIfCollided(Game.x, Game.y, tree.wx, tree.wy, tree.wx + tree.Nx, tree.wy + tree.Ny) &&
-				checkIfCollided(Game.x, Game.y + 2, tree.wx, tree.xy, tree.Nx, tree.Ny)){
-				Spieler.validMove[3] = false;
-				Spieler.direction[3] = "None";
-				N = false;
-				break;
-			}
-		}
-		if(N){
-			Spieler.validMove[3] = true;
-		}
-	}
+	
 			
 }
 
 class tree{
-	constructor(x, y, wx, wy){
+	constructor(x, y){
 		this.x = x;
 		this.y = y;
 		this.image = document.getElementById("Baum");
-		this.wx = wx;
-		this.wy = wy;
-		this.Nx = 150
+		this.Nx = 150;
+		
 	}
 }
 
 class stone{
-	constructor(x, y, wx, wy){
+	constructor(x, y){
 		this.x = x;
 		this.y = y;
 		this.image = document.getElementById("Stein");
-		this.wx = wx;
-		this.wy = wy;
 		this.Nx = 100;
+		
 		
 	}
 }
 
 class mine{
-	constructor(x, y, wx, wy){
+	constructor(x, y){
 		this.x = x;
 		this.y = y;
 		this.image = document.getElementById("Loch_k");
-		this.wx = wx;
-		this.wy = wy;
+		
 		this.Nx = 100;
 	}
 }
@@ -151,6 +81,19 @@ class game{
 	drawBackground(ctx){
 		ctx.fillStyle = "#48bd00";
 		ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+	}
+	go(direction, speed, dt){
+		speed *= dt/16;
+		speed = Math.round(speed);
+		if(direction == "W" || direction == "O"){
+			Game.x += -speed;
+		}
+	
+		if(direction == "N" || direction == "S"){
+			
+			Game.y += -speed;
+			
+		}
 	}
 }
 
@@ -190,14 +133,7 @@ class player{
 			this.degrees = 225;
 		}
 	}
-	checkColider(object){
-		//Checks if the player collides with anything
-		//should be implemented in Chunk.go();
-		//Not needed
-		
-		
-		
-	}
+	
 }
 //*******************************************
 
@@ -242,33 +178,32 @@ function checkIfCollided(x, y, Ex, Ey, Ewidth, Eheigth){
 
 
 let Chunks = []
-function loadNewChunk(dx, dy){
+function loadNewChunk(xc, yc){
 	let Trees = [];
 	let Stones = [];
 	let Mines = [];
 	
 	for(let i = 0; i < 10; i++){
-		let x = Math.floor(Math.random()*(600));
-		let y = Math.floor(Math.random()*(600));
-		Trees.push(new tree(x, y, x - dx, y - dy));
+		let x = random.randint(xc, xc + 600);
+		let y = random.randint(yc, yc + 600);
+		Trees.push(new tree(x, y));
 	}
 	for(let i = 0; i < 5; i++){
-		let x = Math.floor(Math.random()*(600));
-		let y = Math.floor(Math.random()*(600));
-		Stones.push(new stone(x, y, x - dx, y - dy));
+		let x = random.randint(xc, xc + 600);
+		let y = random.randint(yc, yc + 600);
+		Stones.push(new stone(x, y));
 		//Stones[Stones.length - 1].Nx = Math.floor(Math.random()*5)*50;
 	}
 	let r = Math.floor(Math.random()*20);
 	if(r == 10){
 		for(let i = 0; i < 1; i++){
-			let x = Math.floor(Math.random()*(600));
-			let y = Math.floor(Math.random()*(600));
-			Mines.push(new mine(x, y, x - dx, y - dy));
+			let x = random.randint(xc, xc + 600);
+			let y = random.randint(yc, yc + 600);
+			Mines.push(new mine(x, y));
 		}
 	}
 	Chunks.push(new chunk(0, Trees, Stones, Mines));
-	Chunks[Chunks.length - 1].gOffsetX = dx;
-	Chunks[Chunks.length - 1].gOffsetY = dy;
+	
 	
 }
 
@@ -368,13 +303,14 @@ console.log("dx, ,dy:", Spieler.x, Spieler.y);
 
 
 
-loadNewChunk(Spieler.x - 300, Spieler.y - 300);
+loadNewChunk(0, 0);
 
 //GGAMLLOOP
 
+
 //let lastDeg = 0;
 function GameLoop(dt){
-
+	//ctx.translate(Spieler.x, Spieler.y);
 	
 	let deltaTime = dt - lastTime;
 	lastTime = dt;
@@ -407,21 +343,21 @@ function GameLoop(dt){
 	//Update chunks
 	if(Spieler.direction != "None"){
 		let nStep = Math.floor(3.4)
-		for(chunk of Chunks){
+		
 			
 			if(Spieler.direction[0] == "N"){
-				chunk.go("N", Spieler.speed, deltaTime);
+				Game.go("N", Spieler.speed, deltaTime);
 			}				
 			
 			if(Spieler.direction[2] == "S"){
-				chunk.go("S", -Spieler.speed, deltaTime);
+				Game.go("S", -Spieler.speed, deltaTime);
 			}
 			if(Spieler.direction[3] == "W"){
-				chunk.go("W", Spieler.speed, deltaTime);
+				Game.go("W", Spieler.speed, deltaTime);
 			}
 			if(Spieler.direction[1] == "O"){
-				chunk.go("O", -Spieler.speed, deltaTime);
-			}
+				Game.go("O", -Spieler.speed, deltaTime);
+			
 			
 		}
 	}
@@ -432,7 +368,7 @@ function GameLoop(dt){
 	//colluider
 	for(chunk of Chunks){
 		chunk.draw(ctx);
-		chunk.checkCollider();
+		
 	}
 
 	
