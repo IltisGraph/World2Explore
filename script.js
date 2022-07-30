@@ -1,3 +1,13 @@
+'use strict'; let perlin = { rand_vect: function(){ let theta = Math.random() * 2 * Math.PI; return {x: Math.cos(theta), y: Math.sin(theta)}; }, dot_prod_grid: function(x, y, vx, vy){ let g_vect; let d_vect = {x: x - vx, y: y - vy}; if (this.gradients[[vx,vy]]){ g_vect = this.gradients[[vx,vy]]; } else { g_vect = this.rand_vect(); this.gradients[[vx, vy]] = g_vect; } return d_vect.x * g_vect.x + d_vect.y * g_vect.y; }, smootherstep: function(x){ return 6*x**5 - 15*x**4 + 10*x**3; }, interp: function(x, a, b){ return a + this.smootherstep(x) * (b-a); }, seed: function(){ this.gradients = {}; this.memory = {}; }, get: function(x, y) { if (this.memory.hasOwnProperty([x,y])) return this.memory[[x,y]]; let xf = Math.floor(x); let yf = Math.floor(y); //interpolate 
+																																																																																																																																																																																																																																																																																																																																let tl = this.dot_prod_grid(x, y, xf, yf); let tr = this.dot_prod_grid(x, y, xf+1, yf); let bl = this.dot_prod_grid(x, y, xf, yf+1); let br = this.dot_prod_grid(x, y, xf+1, yf+1); let xt = this.interp(x-xf, tl, tr); let xb = this.interp(x-xf, bl, br); let v = this.interp(y-yf, xt, xb); this.memory[[x,y]] = v; return v; } }; perlin.seed();
+
+
+
+
+
+
+//Code above is not mine it's yust copy-pasted from github
+
 class random{
 	static randint(a, b) {
 		b++;
@@ -5,17 +15,39 @@ class random{
 	}
 }
 
-
 class chunk{
 	constructor(number, Trees, Stone, Mine){
 		this.Number = number;
 		this.Trees = Trees;
 		this.Stones = Stone;
 		this.Mines = Mine;
+		this.x = 0;
+		this.y = 0; 
+		this.Blocks = [];
+		this.createNoise();
 		
+	}
+	drawB(ctx){
+		//BAckground
+		for(let tile of this.Blocks) {
+			if(tile.type == "dirt"){
+				ctx.fillStyle = "#14A800";
+				ctx.fillRect(tile.x + Spieler.x - Game.x, tile.y + Spieler.y - Game.y, 100, 100);
+			}
+			else if(tile.type == "mountain"){
+				ctx.fillStyle = "#808080";
+				ctx.fillRect(tile.x + Spieler.x - Game.x, tile.y + Spieler.y - Game.y, 100, 100);
+			}
+			else if(tile.type == "mushroom"){
+				ctx.fillStyle = "#7A004B";
+				ctx.fillRect(tile.x + Spieler.x - Game.x, tile.y + Spieler.y - Game.y, 100, 100);
+			}
+		}
 	}
 	draw(ctx){
 		
+
+		//Trees stones and mines
 		for(let tree of this.Trees){
 			if(tree.x > 0 && tree.y > 0 && tree.x < GAME_WIDTH && tree.y < GAME_HEIGHT){
 				ctx.drawImage(tree.image, tree.x + Spieler.x - Game.x, tree.y + Spieler.y - Game.y, tree.Nx, tree.Nx);
@@ -35,7 +67,22 @@ class chunk{
 		}
 	}
 
-
+	createNoise() {
+		for(let x = 0; x < 600; x += 100) {
+			for(let y = 0; y < 600; y += 100) {
+				let sed = perlin.get(x.toFixed(1) / 100, y.toFixed(1) / 100);
+				if(sed > 0.3){
+					this.Blocks.push({type: "mountain", x: x, y: y});
+				}
+				else if(sed <= 0.3 && sed > -0.5){
+					this.Blocks.push({type: "dirt", x: x, y: y});
+				}
+				else if(sed <= -0.5) {
+					this.Blocks.push({type: "mushroom", x: x, y: y});
+				}
+			}
+		}
+	}
 
 	// Collider
 	
@@ -148,6 +195,8 @@ let SpielerViewDirection = "N";
 let SpielerGoDirection = "None";
 
 
+
+
 const GAME_WIDTH = window.innerWidth;
 const GAME_HEIGHT = window.innerHeight;
 const GAME_X = GAME_WIDTH / 600;
@@ -203,6 +252,8 @@ function loadNewChunk(xc, yc){
 		}
 	}
 	Chunks.push(new chunk(0, Trees, Stones, Mines));
+	Chunks[Chunks.length - 1].x = xc;
+	Chunks[Chunks.length - 1].y = yc;
 	
 	
 }
@@ -311,15 +362,23 @@ loadNewChunk(0, 0);
 //let lastDeg = 0;
 function GameLoop(dt){
 	//ctx.translate(Spieler.x, Spieler.y);
+
+	
 	
 	let deltaTime = dt - lastTime;
 	lastTime = dt;
 	//console.log(deltaTime);
 
 
+	Game.drawBackground(ctx); 
+	for(let chunk of Chunks){
+		chunk.drawB(ctx);
+	}
+
 	//Spieler rotation aktualisieren
+
 	Spieler.akDegrees();
-	Game.drawBackground(ctx);
+	
 
 
 
@@ -339,10 +398,11 @@ function GameLoop(dt){
 
 	
 	ctx.restore();
+	
+	
 
 	//Update chunks
 	if(Spieler.direction != "None"){
-		let nStep = Math.floor(3.4)
 		
 			
 			if(Spieler.direction[0] == "N"){

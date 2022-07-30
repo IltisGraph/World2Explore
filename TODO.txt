@@ -5,7 +5,7 @@ TODO:
 -make holes block based [DONE]
 -add rotation to the player (rotate in go direction) [DONE]
 -infinite world generation
--perlin noise (-> seeds)
+-perlin noise (-> seeds) [DONE]
 -fewer mines should be generated [DONE]
 -Bigger Trees [DONE]
 -running [DONE]
@@ -18,7 +18,7 @@ TODO:
 
 
 GENERAL:
--biomes
+-biomes [DONE]
 -new dimension
 -mines
 -animals
