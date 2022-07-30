@@ -70,6 +70,7 @@ class chunk{
 	createNoise() {
 		for(let x = 0; x < 600; x += 100) {
 			for(let y = 0; y < 600; y += 100) {
+				
 				let sed = perlin.get(x.toFixed(1) / 100, y.toFixed(1) / 100);
 				if(sed > 0.3){
 					this.Blocks.push({type: "mountain", x: x, y: y});
@@ -243,6 +244,7 @@ function loadNewChunk(xc, yc){
 		Stones.push(new stone(x, y));
 		//Stones[Stones.length - 1].Nx = Math.floor(Math.random()*5)*50;
 	}
+	/*
 	let r = Math.floor(Math.random()*20);
 	if(r == 10){
 		for(let i = 0; i < 1; i++){
@@ -251,11 +253,26 @@ function loadNewChunk(xc, yc){
 			Mines.push(new mine(x, y));
 		}
 	}
+ */
 	Chunks.push(new chunk(0, Trees, Stones, Mines));
 	Chunks[Chunks.length - 1].x = xc;
 	Chunks[Chunks.length - 1].y = yc;
-	
-	
+	let noise = Chunks[Chunks.length - 1].Blocks;
+	let nplaced = 0;
+	for(let n of noise){
+		if(n.type == "mountain" && nplaced == 0){
+			Mines.push(new mine(n.x + Chunks[Chunks.length - 1].x, n.y + Chunks[Chunks.length - 1].y));
+			nplaced++;
+			
+		}
+		else if(n.type == "mountaian"){
+			let ran = random.randint(0, 20);
+			if(ran == 15){
+				Mines.push(new mine(n.x + Chunks[Chunks.length - 1].x, n.y + Chunks[Chunks.length - 1].y));
+			}
+		}
+	}
+	Chunks[Chunks.length - 1].Mines = Mines
 }
 
 
