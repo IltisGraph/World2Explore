@@ -32,15 +32,15 @@ class chunk{
 		for(let tile of this.Blocks) {
 			if(tile.type == "dirt"){
 				ctx.fillStyle = "#14A800";
-				ctx.fillRect(tile.x + Spieler.x - Game.x, tile.y + Spieler.y - Game.y, 100, 100);
+				ctx.fillRect(tile.x + Spieler.x - Game.x + this.x, tile.y + Spieler.y - Game.y + this.y, 100, 100);
 			}
 			else if(tile.type == "mountain"){
 				ctx.fillStyle = "#808080";
-				ctx.fillRect(tile.x + Spieler.x - Game.x, tile.y + Spieler.y - Game.y, 100, 100);
+				ctx.fillRect(tile.x + Spieler.x - Game.x + this.x, tile.y + Spieler.y - Game.y + this.y, 100, 100);
 			}
 			else if(tile.type == "mushroom"){
 				ctx.fillStyle = "#7A004B";
-				ctx.fillRect(tile.x + Spieler.x - Game.x, tile.y + Spieler.y - Game.y, 100, 100);
+				ctx.fillRect(tile.x + Spieler.x - Game.x + this.x, tile.y + Spieler.y - Game.y + this.y, 100, 100);
 			}
 		}
 	}
@@ -49,19 +49,19 @@ class chunk{
 
 		//Trees stones and mines
 		for(let tree of this.Trees){
-			if(tree.x > 0 && tree.y > 0 && tree.x < GAME_WIDTH && tree.y < GAME_HEIGHT){
+			if(tree.x > Game.x - Spieler.x - 200 && tree.y > Game.y - Spieler.y - 200 && tree.x < Game.x + Spieler.x + 50 && tree.y < Game.y + Spieler.y + 50){
 				ctx.drawImage(tree.image, tree.x + Spieler.x - Game.x, tree.y + Spieler.y - Game.y, tree.Nx, tree.Nx);
 			}
 		}
 		
 		for(let stone of this.Stones){
 			
-			if(stone.x > 0 && stone.y > 0 & stone.x < GAME_WIDTH && stone.y < GAME_HEIGHT){
+			if(stone.x > Game.x - Spieler.x - 200 && stone.y > Game.y - Spieler.y - 200 && stone.x < Game.x + Spieler.x + 50 && stone.y < Game.y + Spieler.y + 50){
 				ctx.drawImage(stone.image, stone.x + Spieler.x - Game.x, stone.y + Spieler.y - Game.y, stone.Nx, stone.Nx);
 			}
 		}
 		for(let mine of this.Mines){
-			if(mine.x > 0 && mine.y > 0 && mine.x < GAME_WIDTH && mine.y < GAME_HEIGHT){
+			if(mine.x > Game.x - Spieler.x - 200 && mine.y > Game.y - Spieler.y - 200 && mine.x < Game.x + Spieler.x + 50 && mine.y < Game.y + Spieler.y + 50){
 				ctx.drawImage(mine.image, mine.x + Spieler.x - Game.x, mine.y + Spieler.y - Game.y, mine.Nx, mine.Nx);
 			}
 		}
@@ -194,7 +194,7 @@ let SpielerImg = document.getElementById("Spieler");
 let SpielerViewDirection = "N";
 let SpielerGoDirection = "None";
 
-
+let RenderDistance = 3*600;
 
 
 const GAME_WIDTH = window.innerWidth;
@@ -258,6 +258,14 @@ function loadNewChunk(xc, yc){
 	
 }
 
+
+function createSpawnChunks(){
+	for(let x = -RenderDistance; x < RenderDistance; x += 600){
+		for(let y = -RenderDistance; y < RenderDistance; y += 600){
+			loadNewChunk(x, y);
+		}
+	}
+}
 
 
 
@@ -354,8 +362,15 @@ console.log("dx, ,dy:", Spieler.x, Spieler.y);
 
 
 
-loadNewChunk(0, 0);
-
+//loadNewChunk(0, 0);
+createSpawnChunks();
+//DEBUG
+/*
+console.log("Length", Chunks.length);
+for(let chunk of Chunks){
+	console.log("Cx, Cy", chunk.x, chunk.y);
+}
+*/
 //GGAMLLOOP
 
 
